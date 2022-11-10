@@ -7,11 +7,6 @@ export default function Navbar() {
 	return (
 		<>
 			<div className="navbar">
-				<img
-					src="https://i.ibb.co/9nsTqfG/budget.png"
-					className="icon-nav"
-					align="left"
-				/>
 				<h1 className="title-navbar">Nin-Money</h1>
 				<Breadcrumbs className="nav-option" aria-label="breadcrumb">
 					<Link to="/main" underline="hover" color="inherit">
