@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 export default function Login() {
+	const [email, setEmail] = useState(null);
+	const [password, setPassword] = useState(null);
+
+	// these functions handles the state handlers
+	const inputEmail = (e) => {
+		console.log(`This is email: ${e.target.value}`);
+		setEmail(e.target.value);
+	};
+	const inputPassword = (e) => {
+		console.log(`This is Password: ${e.target.value}`);
+		setPassword(e.target.value);
+	};
 	return (
 		<Box
 			component="form"
@@ -20,11 +32,12 @@ export default function Login() {
 				<div>
 					<TextField
 						className="login-user"
-						id="username"
-						label="username"
+						id="useremail"
+						label="Email"
 						variant="filled"
+						onChange={inputEmail}
 					>
-						Username
+						Email
 					</TextField>
 				</div>
 				<br />
@@ -34,10 +47,18 @@ export default function Login() {
 						id="password"
 						label="password"
 						variant="filled"
+						onChange={inputPassword}
 					/>
 				</div>
 			</div>
-			<Button variant="contained">Login</Button>
+			<Button
+				onClick={() => {
+					console.log("The login button is clicked");
+				}}
+				variant="contained"
+			>
+				Login
+			</Button>
 		</Box>
 	);
 }
