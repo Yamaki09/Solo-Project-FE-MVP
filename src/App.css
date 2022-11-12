@@ -65,11 +65,18 @@
 .mainpage-table-income {
 	background-color: #90ee90;
 	border-spacing: 30px;
+	border-bottom: "2px solid black";
 }
 
 .mainpage-table-expense {
 	background-color: #f75d59;
 	border-spacing: 30px;
+}
+
+.balance {
+	background-color: azure;
+	width: 200px;
+	font-family: "monospace";
 }
 
 /* the whole app */

@@ -2,6 +2,19 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { Link, useNavigate } from "react-router-dom";
+
+const style = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: 400,
+	bgcolor: "background.paper",
+	border: "2px solid #000",
+	boxShadow: 24,
+	p: 4,
+};
 
 export default function Login() {
 	const [email, setEmail] = useState(null);
@@ -16,6 +29,9 @@ export default function Login() {
 		console.log(`This is Password: ${e.target.value}`);
 		setPassword(e.target.value);
 	};
+
+	const navigate = useNavigate();
+
 	return (
 		<Box
 			component="form"
@@ -53,7 +69,7 @@ export default function Login() {
 			</div>
 			<Button
 				onClick={() => {
-					console.log("The login button is clicked");
+					navigate(`/main`);
 				}}
 				variant="contained"
 			>
