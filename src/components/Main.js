@@ -25,8 +25,9 @@ const style = {
 	fontFamily: "monospace",
 };
 
-const API_URL = "http://localhost:8080"; // for local
-//const API_URL = process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com` // for web
+// const API_URL = "http://localhost:8080"; // for local
+const API_URL =
+	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
 
 export default function Main() {
 	const [userName, setUserName] = useState("Koji");
