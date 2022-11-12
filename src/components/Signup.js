@@ -95,7 +95,7 @@ export default function Signup() {
 					className="signup-button"
 					variant="contained"
 					onClick={() => {
-						console.log("signup button is clicked");
+						window.alert("New User Created");
 					}}
 				>
 					Signup
