@@ -5,12 +5,12 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
+import EditIcon from "@mui/icons-material/Edit";
 
 const style = {
 	position: "absolute",
@@ -25,9 +25,9 @@ const style = {
 	fontFamily: "monospace",
 };
 
-// const API_URL = "http://localhost:8080"; // for local
-const API_URL =
-	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
+const API_URL = "http://localhost:8080"; // for local
+// const API_URL =
+// 	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
 
 export default function Main() {
 	const [userName, setUserName] = useState("Koji");
@@ -51,7 +51,7 @@ export default function Main() {
 		setValue(e.target.value);
 	};
 
-	// form submission on income
+	// form submission on income and expense
 	const submitIncome = () => {
 		const data = { name, value };
 		(async () => {
@@ -111,8 +111,6 @@ export default function Main() {
 				const incomeArray = await rawIncomeData.json();
 				const rawExpenseData = await fetch(`${API_URL}/user/expense/${userid}`);
 				const expenseArray = await rawExpenseData.json();
-				console.log("this is income", incomeArray);
-				console.log(expenseArray);
 				setIncome(incomeArray);
 				setExpense(expenseArray);
 				getBalance(incomeArray, expenseArray);
@@ -121,15 +119,17 @@ export default function Main() {
 			}
 		})();
 	}, []);
-	const userid = "1";
+	const userid = "3";
 	return (
 		<>
 			<h1>Welcome {userName}</h1>
-			<TableContainer component={Paper}>
+			<TableContainer>
 				<Table
-					sx={{ minWidth: 650, borderBottom: "2px solid black" }}
+					sx={{
+						width: 500,
+						border: "2px solid black",
+					}}
 					aria-label="simple table"
-					className="mainpage-table-income"
 				>
 					<TableHead>
 						<TableRow
@@ -139,11 +139,14 @@ export default function Main() {
 									fontSize: "30px",
 									fontFamily: "Monospace",
 									fontWeight: "bold",
+									backgroundColor: "#32CD32",
 								},
 							}}
 						>
 							<TableCell component="td">Income</TableCell>
-							<TableCell></TableCell>
+							<TableCell component="td"></TableCell>{" "}
+							{/* this empty cell is for css only */}
+							<TableCell component="td"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -153,6 +156,7 @@ export default function Main() {
 									key={obj.name}
 									sx={{
 										borderBottom: "1px solid black",
+										backgroundColor: "#90EE90",
 										"& th": {
 											border: 0,
 											fontSize: "20px",
@@ -165,12 +169,23 @@ export default function Main() {
 									<TableCell component="th" scope="row">
 										{obj.value}
 									</TableCell>
+									<EditIcon fontSize="large" />
 								</TableRow>
 							);
 						})}
 					</TableBody>
 				</Table>
-				<Button onClick={handleOpenIncome}>Add Income</Button>
+				<Button
+					style={{
+						borderRadius: 35,
+						backgroundColor: "rgb(33, 114, 227)",
+						color: "white",
+						margin: "5px",
+					}}
+					onClick={handleOpenIncome}
+				>
+					Add Income
+				</Button>
 				<Modal
 					open={openIncome}
 					onClose={handleCloseIncome}
@@ -218,24 +233,27 @@ export default function Main() {
 						</Stack>
 					</Box>
 				</Modal>
+				<br />
+				<br />
 				<Table
-					sx={{ minWidth: 650, borderBottom: "2px solid black" }}
+					sx={{ width: 500, borderBottom: "2px solid black" }}
 					aria-label="simple table"
-					className="mainpage-table-expense"
 				>
 					<TableHead>
 						<TableRow
 							sx={{
-								borderBottom: "2px solid black",
+								border: "2px solid black",
 								"& td": {
 									fontSize: "30px",
 									fontFamily: "Monospace",
 									fontWeight: "bold",
+									backgroundColor: "#D2042D",
 								},
 							}}
 						>
 							<TableCell component="td">Expense</TableCell>
-							<TableCell></TableCell>
+							<TableCell component="td"></TableCell>
+							<TableCell component="td"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -245,6 +263,7 @@ export default function Main() {
 									key={obj.name}
 									sx={{
 										borderBottom: "1px solid black",
+										backgroundColor: "#E34234",
 										"& th": {
 											border: 0,
 											fontSize: "20px",
@@ -257,12 +276,23 @@ export default function Main() {
 									<TableCell component="th" scope="row">
 										{obj.value}
 									</TableCell>
+									<EditIcon fontSize="large" />
 								</TableRow>
 							);
 						})}
 					</TableBody>
 				</Table>
-				<Button onClick={handleOpenExpense}>Add Expense</Button>
+				<Button
+					style={{
+						borderRadius: 35,
+						backgroundColor: "rgb(33, 114, 227)",
+						color: "white",
+						margin: "5px",
+					}}
+					onClick={handleOpenExpense}
+				>
+					Add Expense
+				</Button>
 				<Modal
 					open={openExpense}
 					onClose={handleCloseExpense}
@@ -312,7 +342,7 @@ export default function Main() {
 				</Modal>
 			</TableContainer>
 			<div className="balance">
-				<h4>Cash remaining</h4>
+				<h4>Cash remaining:</h4>
 				<p>{balance}</p>
 			</div>
 		</>
