@@ -62,14 +62,6 @@
 }
 
 /* main */
-.mainpage-table-income {
-	background-color: #90ee90;
-	border-spacing: 30px;
-}
-
-.mainpage-table-expense {
-	background-color: #f75d59;
-}
 
 .balance {
 	position: relative;
