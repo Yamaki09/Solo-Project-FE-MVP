@@ -62,21 +62,16 @@
 }
 
 /* main */
-.mainpage-table-income {
-	background-color: #90ee90;
-	border-spacing: 30px;
-	border-bottom: "2px solid black";
-}
-
-.mainpage-table-expense {
-	background-color: #f75d59;
-	border-spacing: 30px;
-}
 
 .balance {
+	position: relative;
+	left: 20px;
 	background-color: azure;
-	width: 200px;
+	width: 250px;
 	font-family: "monospace";
+	border-radius: 10px;
+	text-align: center;
+	font-size: 30px;
 }
 
 /* the whole app */

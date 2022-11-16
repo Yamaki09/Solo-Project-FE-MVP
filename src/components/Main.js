@@ -5,12 +5,12 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
+import EditIcon from "@mui/icons-material/Edit";
 
 const style = {
 	position: "absolute",
@@ -36,12 +36,23 @@ export default function Main() {
 	let [balance, setBalance] = useState(0);
 	const [name, setName] = useState("");
 	const [value, setValue] = useState(0);
+	const [incomeID, setIncomeID] = useState("");
+	const [expenseID, setExpenseID] = useState("");
 	const [openIncome, setOpenIncome] = React.useState(false);
 	const handleOpenIncome = () => setOpenIncome(true);
 	const handleCloseIncome = () => setOpenIncome(false);
 	const [openExpense, setOpenExpense] = React.useState(false);
 	const handleOpenExpense = () => setOpenExpense(true);
 	const handleCloseExpense = () => setOpenExpense(false);
+	const [editIncome, setEditIncome] = React.useState(false);
+	const handleEditIncome = () => setEditIncome(true);
+	const handleCloseIncomeEdit = () => setEditIncome(false);
+	const [editExpense, setEditExpense] = React.useState(false);
+	const handleEditExpense = () => setEditExpense(true);
+	const handleCloseExpenseEdit = () => setEditExpense(false);
+
+	console.log("this is income ID", incomeID);
+	console.log("this is expense ID", expenseID);
 
 	// adding income and expense state handlers
 	const inputName = (e) => {
@@ -51,7 +62,7 @@ export default function Main() {
 		setValue(e.target.value);
 	};
 
-	// form submission on income
+	// form submission on income and expense
 	const submitIncome = () => {
 		const data = { name, value };
 		(async () => {
@@ -64,6 +75,7 @@ export default function Main() {
 				},
 				body: JSON.stringify(data),
 			});
+			console.log(JSON.stringify(rawResponse));
 		})();
 	};
 
@@ -79,6 +91,46 @@ export default function Main() {
 				},
 				body: JSON.stringify(data),
 			});
+			console.log(JSON.stringify(rawResponse));
+		})();
+	};
+
+	// edit income and expense input
+	const submitEditedIncome = () => {
+		const data = { name, value };
+		(async () => {
+			console.log(data);
+			const rawResponse = await fetch(
+				`${API_URL}/user/income/edit/${userid}/${incomeID}`,
+				{
+					method: "PUT",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				}
+			);
+			console.log(JSON.stringify(rawResponse));
+		})();
+	};
+
+	const submitEditedExpense = () => {
+		const data = { name, value };
+		(async () => {
+			console.log(data);
+			const rawResponse = await fetch(
+				`${API_URL}/user/expense/edit/${userid}/${expenseID}`,
+				{
+					method: "PUT",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				}
+			);
+			console.log(JSON.stringify(rawResponse));
 		})();
 	};
 
@@ -111,8 +163,6 @@ export default function Main() {
 				const incomeArray = await rawIncomeData.json();
 				const rawExpenseData = await fetch(`${API_URL}/user/expense/${userid}`);
 				const expenseArray = await rawExpenseData.json();
-				console.log("this is income", incomeArray);
-				console.log(expenseArray);
 				setIncome(incomeArray);
 				setExpense(expenseArray);
 				getBalance(incomeArray, expenseArray);
@@ -125,11 +175,13 @@ export default function Main() {
 	return (
 		<>
 			<h1>Welcome {userName}</h1>
-			<TableContainer component={Paper}>
+			<TableContainer>
 				<Table
-					sx={{ minWidth: 650, borderBottom: "2px solid black" }}
+					sx={{
+						width: 500,
+						border: "2px solid black",
+					}}
 					aria-label="simple table"
-					className="mainpage-table-income"
 				>
 					<TableHead>
 						<TableRow
@@ -139,20 +191,24 @@ export default function Main() {
 									fontSize: "30px",
 									fontFamily: "Monospace",
 									fontWeight: "bold",
+									backgroundColor: "#32CD32",
 								},
 							}}
 						>
 							<TableCell component="td">Income</TableCell>
-							<TableCell></TableCell>
+							<TableCell component="td"></TableCell>{" "}
+							{/* this empty cell is for css only */}
+							<TableCell component="td"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{income.map((obj) => {
 							return (
 								<TableRow
-									key={obj.name}
+									key={obj.id}
 									sx={{
 										borderBottom: "1px solid black",
+										backgroundColor: "#90EE90",
 										"& th": {
 											border: 0,
 											fontSize: "20px",
@@ -165,12 +221,29 @@ export default function Main() {
 									<TableCell component="th" scope="row">
 										{obj.value}
 									</TableCell>
+									<EditIcon
+										fontSize="large"
+										onClick={() => {
+											setIncomeID(obj.id);
+											handleEditIncome();
+										}}
+									/>
 								</TableRow>
 							);
 						})}
 					</TableBody>
 				</Table>
-				<Button onClick={handleOpenIncome}>Add Income</Button>
+				<Button
+					style={{
+						borderRadius: 35,
+						backgroundColor: "rgb(33, 114, 227)",
+						color: "white",
+						margin: "5px",
+					}}
+					onClick={handleOpenIncome}
+				>
+					Add Income
+				</Button>
 				<Modal
 					open={openIncome}
 					onClose={handleCloseIncome}
@@ -218,33 +291,37 @@ export default function Main() {
 						</Stack>
 					</Box>
 				</Modal>
+				<br />
+				<br />
 				<Table
-					sx={{ minWidth: 650, borderBottom: "2px solid black" }}
+					sx={{ width: 500, borderBottom: "2px solid black" }}
 					aria-label="simple table"
-					className="mainpage-table-expense"
 				>
 					<TableHead>
 						<TableRow
 							sx={{
-								borderBottom: "2px solid black",
+								border: "2px solid black",
 								"& td": {
 									fontSize: "30px",
 									fontFamily: "Monospace",
 									fontWeight: "bold",
+									backgroundColor: "#D2042D",
 								},
 							}}
 						>
 							<TableCell component="td">Expense</TableCell>
-							<TableCell></TableCell>
+							<TableCell component="td"></TableCell>
+							<TableCell component="td"></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{expense.map((obj) => {
 							return (
 								<TableRow
-									key={obj.name}
+									key={obj.id}
 									sx={{
 										borderBottom: "1px solid black",
+										backgroundColor: "#E34234",
 										"& th": {
 											border: 0,
 											fontSize: "20px",
@@ -257,12 +334,29 @@ export default function Main() {
 									<TableCell component="th" scope="row">
 										{obj.value}
 									</TableCell>
+									<EditIcon
+										fontSize="large"
+										onClick={() => {
+											setExpenseID(obj.id);
+											handleEditExpense();
+										}}
+									/>
 								</TableRow>
 							);
 						})}
 					</TableBody>
 				</Table>
-				<Button onClick={handleOpenExpense}>Add Expense</Button>
+				<Button
+					style={{
+						borderRadius: 35,
+						backgroundColor: "rgb(33, 114, 227)",
+						color: "white",
+						margin: "5px",
+					}}
+					onClick={handleOpenExpense}
+				>
+					Add Expense
+				</Button>
 				<Modal
 					open={openExpense}
 					onClose={handleCloseExpense}
@@ -312,9 +406,105 @@ export default function Main() {
 				</Modal>
 			</TableContainer>
 			<div className="balance">
-				<h4>Cash remaining</h4>
+				<h4>Cash remaining:</h4>
 				<p>{balance}</p>
 			</div>
+			{/* This modal is for edit income */}
+			<Modal
+				open={editIncome}
+				onClose={handleCloseIncomeEdit}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style} noValidate autoComplete="off">
+					<Stack
+						direction="column"
+						justifyContent="center"
+						alignItems="center"
+						spacing={0.5}
+					>
+						<TextField
+							required
+							id="incomeName"
+							label="income name"
+							value={name}
+							onChange={inputName}
+						/>
+						<TextField
+							required
+							id="incomeValue"
+							label="value"
+							value={value}
+							onChange={inputValue}
+						/>
+						<Button
+							onClick={() => {
+								submitEditedIncome();
+								window.location.reload();
+							}}
+							variant="outlined"
+						>
+							Submit
+						</Button>
+						<Button
+							onClick={() => {
+								handleCloseIncomeEdit();
+							}}
+							variant="outlined"
+						>
+							Close
+						</Button>
+					</Stack>
+				</Box>
+			</Modal>
+			{/* This modal is for edit expense */}
+			<Modal
+				open={editExpense}
+				onClose={handleCloseExpenseEdit}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style} noValidate autoComplete="off">
+					<Stack
+						direction="column"
+						justifyContent="center"
+						alignItems="center"
+						spacing={0.5}
+					>
+						<TextField
+							required
+							id="expenseName"
+							label="Expense Name"
+							value={name}
+							onChange={inputName}
+						/>
+						<TextField
+							required
+							id="expenseValue"
+							label="value"
+							value={value}
+							onChange={inputValue}
+						/>
+						<Button
+							onClick={() => {
+								submitEditedExpense();
+								window.location.reload();
+							}}
+							variant="outlined"
+						>
+							Submit
+						</Button>
+						<Button
+							onClick={() => {
+								handleCloseExpenseEdit();
+							}}
+							variant="outlined"
+						>
+							Close
+						</Button>
+					</Stack>
+				</Box>
+			</Modal>
 		</>
 	);
 }
