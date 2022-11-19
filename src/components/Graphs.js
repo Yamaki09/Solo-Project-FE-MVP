@@ -3,10 +3,10 @@ import DataChart from "./DataChart";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:8080"; // for local
+// const API_URL = "http://localhost:8080"; // for local
 
-// const API_URL =
-//  process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
+const API_URL =
+	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
 
 // Styling the table
 const style = { width: 900, backgroundColor: "white", borderRadius: 35 };
@@ -59,7 +59,7 @@ export default function Graphs() {
 		setTotalExpenseBalance(result);
 		return result;
 	}
-	const userid = "2";
+	const userid = "3";
 
 	let [totalBalance, setTotalBalance] = useState(0);
 	let [totalIncomeBalance, setTotalIncomeBalance] = useState(0);
