@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Main from "./components/Main";
 import Navbar from "./components/Navbar";
 import Signup from "./components/Signup";
+import Graphs from "./components/Graphs";
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/signup" element={<Signup />} />
 				<Route exact path="/main" element={<Main />} />
+				<Route exact path="/graph" element={<Graphs />} />
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>
 		</>

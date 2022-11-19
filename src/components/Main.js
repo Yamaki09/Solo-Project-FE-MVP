@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 const style = {
 	position: "absolute",
@@ -25,9 +26,9 @@ const style = {
 	fontFamily: "monospace",
 };
 
-// const API_URL = "http://localhost:8080"; // for local
-const API_URL =
-	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
+const API_URL = "http://localhost:8080"; // for local
+// const API_URL =
+// 	process.env.REACT_APP_API_URL || `https://nin-money-api.onrender.com`; // for web
 
 export default function Main() {
 	const [userName, setUserName] = useState("Koji");
@@ -67,7 +68,7 @@ export default function Main() {
 		const data = { name, value };
 		(async () => {
 			console.log(data);
-			const rawResponse = await fetch(`${API_URL}/user/income/new`, {
+			const rawResponse = await fetch(`${API_URL}/user/income/new/${userid}`, {
 				method: "POST",
 				mode: "cors",
 				headers: {
@@ -83,7 +84,7 @@ export default function Main() {
 		const data = { name, value };
 		(async () => {
 			console.log(data);
-			const rawResponse = await fetch(`${API_URL}/user/expense/new`, {
+			const rawResponse = await fetch(`${API_URL}/user/expense/new/${userid}`, {
 				method: "POST",
 				mode: "cors",
 				headers: {
@@ -171,7 +172,8 @@ export default function Main() {
 			}
 		})();
 	}, []);
-	const userid = "1";
+	const userid = "2";
+	const navigate = useNavigate();
 	return (
 		<>
 			<h1>Welcome {userName}</h1>
@@ -409,6 +411,14 @@ export default function Main() {
 				<h4>Cash remaining:</h4>
 				<p>{balance}</p>
 			</div>
+			<Button
+				onClick={() => {
+					navigate(`/graph`);
+				}}
+				variant="contained"
+			>
+				Go to graph
+			</Button>
 			{/* This modal is for edit income */}
 			<Modal
 				open={editIncome}
