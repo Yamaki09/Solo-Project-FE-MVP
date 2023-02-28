@@ -63,7 +63,7 @@ export default function Graphs() {
 
 	let [totalBalance, setTotalBalance] = useState(0);
 	let [totalIncomeBalance, setTotalIncomeBalance] = useState(0);
-	let [totalExpenseBalance, setTotalExpenseBalance] = useState(0); // getting the balance
+	let [totalExpenseBalance, setTotalExpenseBalance] = useState(0);
 	let [userData, setUserData] = useState({
 		labels: ["Income", "Expense", "Balance"],
 		datasets: [
