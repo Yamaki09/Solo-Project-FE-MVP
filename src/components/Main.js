@@ -52,7 +52,6 @@ export default function Main() {
 	const handleEditExpense = () => setEditExpense(true);
 	const handleCloseExpenseEdit = () => setEditExpense(false);
 
-	console.log("this is income ID", incomeID);
 	console.log("this is expense ID", expenseID);
 
 	// adding income and expense state handlers
